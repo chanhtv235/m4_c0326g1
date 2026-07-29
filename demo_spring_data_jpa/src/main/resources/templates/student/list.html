@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách</title>
+    <th:block th:replace="~{layout/layout::library}"/>
+</head>
+<body>
+<th:block th:replace="~{layout/layout::navbar}"/>
+<div class="container-fluid">
+    <h1>Danh sách sinh viên</h1>
+    <form action="/student">
+        <input name="searchName" th:value="${searchName}" placeholder="nhập tên">
+        <button>Tìm kiếm</button>
+    </form>
+    <a class="btn btn-sm btn-primary" href="student/add">Thêm mới</a>
+    <h4 style="color: red" th:text="${mess}"></h4>
+    <table class="btn btn-dark btn-stripped" border="1">
+        <tr>
+            <th>STT</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Detail-RP</th>
+            <th>Detail-PV</th>
+        </tr>
+
+        <tr th:each="student,status:${studentPage.getContent()}">
+            <td th:text="${status.count}"></td>
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.name}"></td>
+            <td th:text="${student.gender}"></td>
+            <td>
+                <a class="btn btn-sm btn-primary" th:href="@{student/detail(id=${student.id})}">Detail1</a></td>
+            <td>
+                <a class="btn btn-sm btn-primary" th:href="@{student/__${student.id}__/detail}">Detail2</a></td>
+        </tr>
+        <tr th:if="${studentPage.content.isEmpty()}">
+            <td colspan="8" th:text="${'Danh sách trống'}"></td>
+        </tr>
+    </table>
+    <div>
+        <a th:if="${studentPage.hasPrevious()}" th:href="@{/student(page=${studentPage.number -1},searchName=${searchName})}">Trước</a>
+        <span th:text="${studentPage.number + 1}"></span>/<span th:text="${studentPage.totalPages}"></span>
+        <a th:if="${studentPage.hasNext()}" th:href="@{/student(page=${studentPage.number + 1},searchName=${searchName})}">Sau</a>
+    </div>
+</div>
+
+</body>
+</html>
